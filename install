@@ -1,0 +1,3 @@
+#!/bin/bash
+chmod +x install.py
+python install.py
